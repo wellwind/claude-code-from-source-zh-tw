@@ -1,0 +1,151 @@
+---
+import { parts, chapters, getPartForChapter } from '../book.config';
+
+interface Props {
+  currentSlug?: string;
+}
+
+const { currentSlug } = Astro.props;
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : rawBase + '/';
+
+// Determine which part is currently active
+const currentChapterNum = currentSlug
+  ? parseInt(currentSlug.match(/^ch(\d+)/)?.[1] || '0', 10)
+  : 0;
+const currentPart = currentChapterNum ? getPartForChapter(currentChapterNum) : null;
+---
+
+<nav id="sidebar" class="hidden lg:block w-64 shrink-0">
+  <div class="sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto py-6 px-4">
+    {parts.map((part) => {
+      const partChapters = chapters.filter(c => part.chapters.includes(c.number));
+      const isActivePart = currentPart?.number === part.number;
+
+      return (
+        <div class="mb-4">
+          <button
+            data-part-toggle={part.number}
+            class="flex items-center justify-between w-full text-left text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] hover:text-[var(--color-terracotta)] transition-colors py-1"
+          >
+            <span>Part {part.number}: {part.title}</span>
+            <svg
+              class:list={[
+                'w-3 h-3 transition-transform',
+                { 'rotate-90': isActivePart },
+              ]}
+              data-part-arrow={part.number}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <ul
+            data-part-list={part.number}
+            class:list={[
+              'mt-1 space-y-0.5 overflow-hidden transition-all',
+              { hidden: !isActivePart },
+            ]}
+          >
+            {partChapters.map((ch) => {
+              const isActive = currentSlug === ch.slug;
+              return (
+                <li>
+                  <a
+                    href={`${base}${ch.slug}/`}
+                    class:list={[
+                      'block py-1.5 px-3 rounded-md text-sm transition-colors',
+                      isActive
+                        ? 'bg-[var(--color-terracotta)]/10 text-[var(--color-terracotta)] font-medium'
+                        : 'text-[var(--color-secondary)] dark:text-[var(--color-muted)] hover:text-[var(--color-charcoal)] dark:hover:text-[var(--color-cream)] hover:bg-[var(--color-beige)] dark:hover:bg-[var(--color-dark-surface)]',
+                    ]}
+                  >
+                    <span class="text-xs text-[var(--color-muted)] mr-1.5">{ch.number}.</span>
+                    {ch.title.replace(/^(Chapter \d+:\s*)?/, '')}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      );
+    })}
+  </div>
+</nav>
+
+<!-- 行動裝置遮罩層 -->
+<div id="sidebar-overlay" class="fixed inset-0 z-40 bg-black/40 hidden lg:hidden" />
+<div id="sidebar-mobile" class="fixed top-0 left-0 z-50 w-72 h-full bg-[var(--color-cream)] dark:bg-[var(--color-charcoal)] shadow-xl transform -translate-x-full transition-transform duration-200 lg:hidden overflow-y-auto">
+  <div class="p-4 pt-16">
+    {parts.map((part) => {
+      const partChapters = chapters.filter(c => part.chapters.includes(c.number));
+      const isActivePart = currentPart?.number === part.number;
+
+      return (
+        <div class="mb-4">
+          <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] py-1">
+            Part {part.number}: {part.title}
+          </div>
+          <ul class="mt-1 space-y-0.5">
+            {partChapters.map((ch) => {
+              const isActive = currentSlug === ch.slug;
+              return (
+                <li>
+                  <a
+                    href={`${base}${ch.slug}/`}
+                    class:list={[
+                      'block py-1.5 px-3 rounded-md text-sm transition-colors',
+                      isActive
+                        ? 'bg-[var(--color-terracotta)]/10 text-[var(--color-terracotta)] font-medium'
+                        : 'text-[var(--color-secondary)] dark:text-[var(--color-muted)]',
+                    ]}
+                  >
+                    <span class="text-xs text-[var(--color-muted)] mr-1.5">{ch.number}.</span>
+                    {ch.title}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+<script>
+  // Part toggle (desktop)
+  document.querySelectorAll('[data-part-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const partNum = (btn as HTMLElement).dataset.partToggle;
+      const list = document.querySelector(`[data-part-list="${partNum}"]`);
+      const arrow = document.querySelector(`[data-part-arrow="${partNum}"]`);
+      list?.classList.toggle('hidden');
+      arrow?.classList.toggle('rotate-90');
+    });
+  });
+
+  // Mobile sidebar
+  const toggle = document.getElementById('sidebar-toggle');
+  const overlay = document.getElementById('sidebar-overlay');
+  const mobile = document.getElementById('sidebar-mobile');
+
+  function openMobileSidebar() {
+    mobile?.classList.remove('-translate-x-full');
+    overlay?.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  }
+
+  function closeMobileSidebar() {
+    mobile?.classList.add('-translate-x-full');
+    overlay?.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+  }
+
+  toggle?.addEventListener('click', openMobileSidebar);
+  overlay?.addEventListener('click', closeMobileSidebar);
+</script>

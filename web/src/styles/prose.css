@@ -1,0 +1,221 @@
+/* Chapter prose typography overrides */
+.chapter-prose {
+  max-width: 72ch;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+}
+
+/* Focus mode: wider, centered reading area */
+.focus-mode .chapter-prose {
+  max-width: 90ch;
+}
+
+.focus-mode main {
+  max-width: 60rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.chapter-prose h1 {
+  font-family: var(--font-serif);
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: var(--color-charcoal);
+}
+
+html.dark .chapter-prose h1 {
+  color: var(--color-cream);
+}
+
+.chapter-prose h2 {
+  font-family: var(--font-serif);
+  font-size: 1.625rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-charcoal);
+}
+
+html.dark .chapter-prose h2 {
+  color: var(--color-cream);
+  border-top-color: #333;
+}
+
+.chapter-prose h2:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.chapter-prose h3 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-charcoal);
+}
+
+html.dark .chapter-prose h3 {
+  color: var(--color-cream);
+}
+
+.chapter-prose p {
+  margin-bottom: 1.25rem;
+}
+
+.chapter-prose a {
+  color: var(--color-terracotta);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.chapter-prose a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.chapter-prose strong {
+  font-weight: 700;
+  color: var(--color-charcoal);
+}
+
+html.dark .chapter-prose strong {
+  color: var(--color-cream);
+}
+
+.chapter-prose blockquote {
+  border-left: 3px solid var(--color-terracotta);
+  padding-left: 1rem;
+  color: var(--color-secondary);
+  font-style: italic;
+}
+
+html.dark .chapter-prose blockquote {
+  color: var(--color-muted);
+}
+
+/* Tables */
+.chapter-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  margin: 1.5rem 0;
+}
+
+.chapter-prose th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--color-terracotta);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.chapter-prose td {
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+html.dark .chapter-prose td {
+  border-bottom-color: #333;
+}
+
+.chapter-prose tr:hover td {
+  background-color: var(--color-beige);
+}
+
+html.dark .chapter-prose tr:hover td {
+  background-color: var(--color-dark-surface);
+}
+
+/* Horizontal rules as section dividers */
+.chapter-prose hr {
+  border: none;
+  height: 1px;
+  background-color: var(--color-border);
+  margin: 3rem 0;
+}
+
+html.dark .chapter-prose hr {
+  background-color: #333;
+}
+
+/* Lists */
+.chapter-prose ul, .chapter-prose ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.chapter-prose li {
+  margin-bottom: 0.5rem;
+}
+
+.chapter-prose li::marker {
+  color: var(--color-terracotta);
+}
+
+/* Diagram slots — placeholders where interactive components get teleported inline */
+.diagram-slot {
+  margin: 2rem 0;
+}
+
+/* Empty slots (no interactive component mapped) collapse to zero height */
+.diagram-slot:empty {
+  display: none;
+}
+
+/* Hide the diagram-grid wrapper from ch16 markdown (topologies replaced by React component) */
+.diagram-grid {
+  display: none;
+}
+
+/* Table wrapper for horizontal scroll on mobile */
+.table-wrapper {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Code block container */
+.code-block-wrapper {
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.copy-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  background-color: var(--color-beige);
+  color: var(--color-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.code-block-wrapper:hover .copy-button {
+  opacity: 1;
+}
+
+.copy-button:hover {
+  background-color: var(--color-terracotta);
+  color: white;
+  border-color: var(--color-terracotta);
+}
+
+html.dark .copy-button {
+  background-color: var(--color-dark-surface);
+  border-color: #444;
+}

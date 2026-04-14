@@ -1,0 +1,63 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Sidebar from '../components/Sidebar.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import ChapterNav from '../components/ChapterNav.astro';
+import ReadingProgress from '../components/ReadingProgress.astro';
+import InteractiveDiagrams from '../components/InteractiveDiagrams.astro';
+import { type ChapterConfig, type PartConfig, isFirstChapterOfPart } from '../book.config';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  chapterNumber: number;
+  slug: string;
+  headings: Heading[];
+  prev: ChapterConfig | null;
+  next: ChapterConfig | null;
+  part: PartConfig | undefined;
+}
+
+const { title, description, chapterNumber, slug, headings, prev, next, part } = Astro.props;
+const showPartHeader = part && isFirstChapterOfPart(chapterNumber);
+---
+
+<BaseLayout title={`第 ${chapterNumber} 章：${title} | Claude Code from Source`} description={description}>
+  <ReadingProgress />
+  <Header />
+
+  <div id="chapter-layout" class="flex max-w-[90rem] mx-auto">
+    <Sidebar currentSlug={slug} />
+
+    <main class="flex-1 min-w-0 px-4 md:px-8 lg:px-12 py-8 transition-all duration-200">
+      {showPartHeader && (
+        <div class="mb-8 pb-6 border-b border-[var(--color-border)] dark:border-[#333]">
+          <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-terracotta)] mb-1">第 {part!.number} 部</p>
+          <h2 class="text-2xl font-bold text-[var(--color-charcoal)] dark:text-[var(--color-cream)] font-[var(--font-serif)]">{part!.title}</h2>
+          <p class="text-sm italic text-[var(--color-muted)] mt-2">{part!.epigraph}</p>
+        </div>
+      )}
+
+      <article class="chapter-prose">
+        <slot />
+      </article>
+
+      <InteractiveDiagrams chapterNumber={chapterNumber} />
+
+      <ChapterNav prev={prev} next={next} />
+    </main>
+
+    <TableOfContents headings={headings} />
+  </div>
+
+  <!-- 客戶端腳本 -->
+  <script src="../scripts/copy-code.ts"></script>
+  <script src="../scripts/focus-mode.ts"></script>
+</BaseLayout>

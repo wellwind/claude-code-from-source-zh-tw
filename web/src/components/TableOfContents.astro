@@ -1,0 +1,43 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+
+// Only show H2 and H3
+const tocHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+---
+
+{tocHeadings.length > 0 && (
+  <aside class="hidden xl:block w-56 shrink-0">
+    <div class="sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto py-6 px-4">
+      <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] mb-3">本頁目錄</p>
+      <ul class="space-y-1">
+        {tocHeadings.map((heading) => (
+          <li>
+            <a
+              href={`#${heading.slug}`}
+              data-toc-link
+              class:list={[
+                'block text-sm transition-colors hover:text-[var(--color-terracotta)]',
+                heading.depth === 3 ? 'pl-3 text-xs' : '',
+                'text-[var(--color-muted)]',
+              ]}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </aside>
+)}
+
+<script src="../scripts/toc-highlight.ts"></script>

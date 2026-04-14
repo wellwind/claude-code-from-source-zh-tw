@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import ArchitectureExplorer from '../components/ArchitectureExplorer';
+import { parts, chapters } from '../book.config';
+
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase : rawBase + '/';
+---
+
+<BaseLayout
+  title="Claude Code from Source — 架構、模式與內部機制"
+  description="一本分析 Anthropic AI 程式碼代理架構的技術書籍。18 章、400 頁，透過原始碼映射逆向工程而成。不含原始碼——只有可遷移的模式。"
+>
+  <Header />
+
+  <main class="max-w-4xl mx-auto px-4 md:px-8 py-12 md:py-20">
+
+    <!-- Hero -->
+    <div class="text-center mb-20">
+      <img
+        src={`${base}cover.jpg`}
+        alt="Claude Code from Source — 書籍封面"
+        class="mx-auto w-64 md:w-72 rounded-lg shadow-lg mb-10"
+      />
+      <h1 class="text-3xl md:text-4xl font-bold font-[var(--font-serif)] text-[var(--color-charcoal)] dark:text-[var(--color-cream)] mb-6 leading-tight">
+        Anthropic 如何打造最廣泛使用的<br class="hidden md:inline" /> AI 程式碼代理
+      </h1>
+      <p class="text-lg text-[var(--color-secondary)] dark:text-[var(--color-muted)] max-w-2xl mx-auto leading-relaxed mb-6">
+        當 Claude Code 發佈到 npm 時，原始碼映射也一併隨附。我們讀遍了每一個檔案。本書將其中的架構、設計決策與可遷移的模式提煉為
+        <span class="text-[var(--color-terracotta)] font-medium">18 個章節</span>，讓你能從中學習並應用到自己的系統。
+      </p>
+      <a
+        href={`${base}${chapters[0].slug}/`}
+        class="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-terracotta)] text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
+      >
+        開始閱讀
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- What You'll Learn -->
+    <section class="mb-20">
+      <h2 class="text-2xl font-bold font-[var(--font-serif)] text-[var(--color-charcoal)] dark:text-[var(--color-cream)] mb-8">
+        你將學到什麼
+      </h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        {[
+          { title: '代理迴圈', text: '一個 async generator 如何驅動整個系統——串流模型輸出、執行工具、從錯誤中恢復，以及透過 4 層機制壓縮上下文。' },
+          { title: '大規模工具執行', text: '從模型請求到工具結果的 14 步管線。權限解析、推測性執行、依安全分類進行的併發批次處理。' },
+          { title: '多代理協作', text: '子代理如何共享提示快取前綴以降低 95% 成本。分叉代理、協調者模式、具有信箱訊息傳遞的群集團隊。' },
+          { title: '無資料庫的記憶系統', text: '基於檔案的記憶系統搭配 LLM 驅動的回憶機制。四種記憶類型、過期警告，以及一個優於嵌入搜尋的 Sonnet 側查詢。' },
+          { title: '效能工程', text: '透過平行 I/O 在 240ms 內啟動。槽位保留機制在 99% 的請求中節省上下文。位圖預過濾器用於模糊搜尋。每一毫秒都被精確管理。' },
+          { title: '擴充性與安全性', text: '兩階段技能載入（啟動時載入元資料，呼叫時載入內容）。27 個生命週期鉤子，啟動時凍結設定快照以防止注入攻擊。' },
+        ].map(({ title, text }) => (
+          <div class="p-5 rounded-lg border border-[var(--color-border)] dark:border-[#333]">
+            <h3 class="font-semibold text-[var(--color-charcoal)] dark:text-[var(--color-cream)] mb-2">{title}</h3>
+            <p class="text-sm text-[var(--color-secondary)] dark:text-[var(--color-muted)] leading-relaxed">{text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Architecture Explorer -->
+    <section class="mb-20">
+      <h2 class="text-2xl font-bold font-[var(--font-serif)] text-[var(--color-charcoal)] dark:text-[var(--color-cream)] mb-3">
+        探索架構
+      </h2>
+      <p class="text-sm text-[var(--color-muted)] mb-6">
+        六個核心抽象構成了 Claude Code 的基礎。拖曳節點重新排列，懸停查看細節，點擊閱讀對應章節。
+      </p>
+      <ArchitectureExplorer client:only="react" className="w-full" />
+    </section>
+
+    <!-- Who This Is For -->
+    <section class="mb-20">
+      <h2 class="text-2xl font-bold font-[var(--font-serif)] text-[var(--color-charcoal)] dark:text-[var(--color-cream)] mb-6">
+        本書適合誰
+      </h2>
+      <div class="space-y-4 text-[var(--color-secondary)] dark:text-[var(--color-muted)]">
+        <p><strong class="text-[var(--color-charcoal)] dark:text-[var(--color-cream)]">正在建構代理系統的工程師。</strong>每一章的結尾都有「實踐應用」——5 個可遷移的模式，附帶具體的調適建議。借用架構，避開錯誤。</p>
+        <p><strong class="text-[var(--color-charcoal)] dark:text-[var(--color-cream)]">評估架構的技術主管。</strong>跟著敘事走，不需要讀完每一段程式碼。理解決策背後的原因，而非僅了解建構了什麼。</p>
+        <p><strong class="text-[var(--color-charcoal)] dark:text-[var(--color-cream)]">對正式環境 AI 工具運作方式感到好奇的人。</strong>Claude Code 被數十萬開發者使用。這就是它底層的運作方式。</p>
+      </div>
+    </section>
+
+    <!-- Table of Contents -->
+    <section class="mb-20">
+      <h2 class="text-2xl font-bold font-[var(--font-serif)] text-[var(--color-charcoal)] dark:text-[var(--color-cream)] mb-8">
+        目錄
+      </h2>
+      {parts.map((part) => {
+        const partChapters = chapters.filter(c => part.chapters.includes(c.number));
+        return (
+          <div class="mb-10">
+            <div class="flex items-baseline gap-3 mb-1">
+              <span class="text-xs font-semibold uppercase tracking-wider text-[var(--color-terracotta)]">第 {part.number} 部</span>
+              <h3 class="text-lg font-bold text-[var(--color-charcoal)] dark:text-[var(--color-cream)] font-[var(--font-serif)]">{part.title}</h3>
+            </div>
+            <p class="text-sm italic text-[var(--color-muted)] mb-4">{part.epigraph}</p>
+
+            <div class="space-y-2">
+              {partChapters.map((ch) => (
+                <a
+                  href={`${base}${ch.slug}/`}
+                  class="group flex items-start gap-3 p-3 -mx-3 rounded-lg hover:bg-[var(--color-beige)] dark:hover:bg-[var(--color-dark-surface)] transition-colors"
+                >
+                  <span class="text-sm font-mono text-[var(--color-muted)] mt-0.5 w-6 shrink-0 text-right">{ch.number}</span>
+                  <div>
+                    <span class="text-[var(--color-charcoal)] dark:text-[var(--color-cream)] group-hover:text-[var(--color-terracotta)] font-medium transition-colors">
+                      {ch.title}
+                    </span>
+                    <p class="text-sm text-[var(--color-muted)] mt-0.5">{ch.description}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </section>
+
+    <!-- How This Was Made -->
+    <section class="mb-20">
+      <h2 class="text-2xl font-bold font-[var(--font-serif)] text-[var(--color-charcoal)] dark:text-[var(--color-cream)] mb-6">
+        本書如何製作
+      </h2>
+      <div class="space-y-4 text-[var(--color-secondary)] dark:text-[var(--color-muted)] leading-relaxed">
+        <p>
+          原始碼從 npm 的原始碼映射中提取——隨 Claude Code 一起發佈的 <code>.js.map</code> 檔案包含了一個 <code>sourcesContent</code> 欄位，內含完整的原始 TypeScript。近兩千個檔案構成了完整的架構。
+        </p>
+        <p>
+          <strong class="text-[var(--color-charcoal)] dark:text-[var(--color-cream)]">36 個 AI 代理</strong>分四個階段分析並撰寫了整本書：
+        </p>
+        <div class="grid sm:grid-cols-2 gap-4 my-6">
+          {[
+            { phase: '探索', detail: '6 個平行代理讀遍原始碼樹中的每一個檔案' },
+            { phase: '分析', detail: '12 個代理撰寫了 494KB 的原始技術文件' },
+            { phase: '撰寫', detail: '15 個代理從零開始將所有內容重寫為敘事章節' },
+            { phase: '審閱與修訂', detail: '3 位審閱者產出 900 行回饋意見；3 個代理套用了所有修正' },
+          ].map(({ phase, detail }) => (
+            <div class="flex gap-3 items-start p-4 rounded-lg bg-[var(--color-beige)]/50 dark:bg-[var(--color-dark-surface)]/50">
+              <span class="text-[var(--color-terracotta)] font-semibold text-sm shrink-0">{phase}</span>
+              <span class="text-sm">{detail}</span>
+            </div>
+          ))}
+        </div>
+        <p>
+          整個過程——從原始碼提取到最終修訂完成——大約花了 <strong class="text-[var(--color-charcoal)] dark:text-[var(--color-cream)]">6 小時</strong>。最終的審核確保沒有任何逐字複製的原始碼殘留——每一個程式碼區塊都使用不同的變數名稱重寫為虛擬碼。
+        </p>
+      </div>
+    </section>
+
+    <!-- 10 Patterns -->
+    <section class="mb-20">
+      <h2 class="text-2xl font-bold font-[var(--font-serif)] text-[var(--color-charcoal)] dark:text-[var(--color-cream)] mb-3">
+        讓一切運作的 10 個模式
+      </h2>
+      <p class="text-[var(--color-muted)] mb-6">即使你什麼都不讀，也請看看這些定義了 Claude Code 的架構策略。</p>
+      <div class="space-y-4">
+        {[
+          { name: 'AsyncGenerator 作為代理迴圈', desc: '產出 Messages、具型別的 Terminal 返回值、自然的背壓與取消機制' },
+          { name: '推測性工具執行', desc: '在模型串流期間，於回應完成前就啟動唯讀工具' },
+          { name: '併發安全批次處理', desc: '依安全性分區工具，平行執行讀取，序列化寫入' },
+          { name: '分叉代理實現快取共享', desc: '平行子代理共享位元組完全相同的提示前綴，節省約 95% 的輸入 token' },
+          { name: '4 層上下文壓縮', desc: 'snip、microcompact、collapse、autocompact——每一層都比上一層更輕量' },
+          { name: '基於檔案的記憶搭配 LLM 回憶', desc: 'Sonnet 側查詢選取相關記憶，而非關鍵字比對' },
+          { name: '兩階段技能載入', desc: '啟動時僅載入前置資料，呼叫時才載入完整內容' },
+          { name: '黏性閂鎖確保快取穩定性', desc: '一旦發送 beta 標頭，在整個工作階段中不再取消' },
+          { name: '槽位保留', desc: '預設 8K 輸出上限，觸及時提升至 64K（在 99% 的請求中節省上下文）' },
+          { name: '鉤子設定快照', desc: '在啟動時凍結，防止執行期注入攻擊' },
+        ].map((p, i) => (
+          <div class="flex gap-4 items-start">
+            <span class="text-sm font-mono text-[var(--color-terracotta)] font-bold mt-1 w-6 shrink-0 text-right">{i + 1}</span>
+            <div>
+              <span class="font-semibold text-[var(--color-charcoal)] dark:text-[var(--color-cream)]">{p.name}</span>
+              <span class="text-[var(--color-secondary)] dark:text-[var(--color-muted)]"> — {p.desc}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <section class="mb-12 p-6 rounded-lg border border-[var(--color-border)] dark:border-[#333] bg-[var(--color-beige)]/50 dark:bg-[var(--color-dark-surface)]/50">
+      <p class="text-sm text-[var(--color-secondary)] dark:text-[var(--color-muted)] leading-relaxed">
+        <strong class="text-[var(--color-charcoal)] dark:text-[var(--color-cream)]">純教育用途。</strong>本書不包含 Claude Code 的任何原始碼——每一個程式碼區塊都是為了說明架構模式而撰寫的原創虛擬碼。目標是幫助工程師理解正式環境 AI 代理的建構方式，而非重製專有軟體。「NO'REILLY」封面純屬戲仿/迷因，僅供說明之用——與 O'Reilly Media 無任何關聯。
+      </p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-sm text-[var(--color-muted)] border-t border-[var(--color-border)] dark:border-[#333] pt-8 pb-12">
+      <p>
+        獨立的教育性分析。與 <a href="https://anthropic.com" class="text-[var(--color-terracotta)] hover:underline">Anthropic</a> 無任何關聯、背書或贊助關係。
+      </p>
+      <p class="mt-2">
+        <a href="https://github.com/alejandrobalderas/claude-code-from-source" class="text-[var(--color-terracotta)] hover:underline">GitHub</a>
+      </p>
+    </footer>
+  </main>
+</BaseLayout>
