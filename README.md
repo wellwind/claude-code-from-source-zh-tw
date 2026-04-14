@@ -2,8 +2,11 @@
 
 **Anthropic AI 程式撰寫代理的架構、模式與內部運作**
 
+> [!NOTE]
+> 本專案為 [claude-code-from-source](https://github.com/alejandrobalderas/claude-code-from-source) 的正體中文翻譯版本。感謝原文作者 [Alejandro Balderas](https://github.com/alejandrobalderas) 提供如此詳盡且具啟發性的研究與分析內容。
+
 <p align="center">
-  <img src="./web/public/cover.jpg" alt="Claude Code from Source — 書籍封面" width="400" />
+  <img src="./web/public/cover-zh-tw.jpg" alt="Claude Code from Source — 書籍封面" width="400" />
   <br/><br/>
   <a href="https://claude-code-from-source.com"><strong>線上閱讀：claude-code-from-source.com</strong></a>
 </p>
