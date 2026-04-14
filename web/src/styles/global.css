@@ -16,8 +16,8 @@
   --color-border: #c2c0b6;
   --color-highlight: #eda100;
 
-  --font-serif: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
-  --font-mono: "JetBrains Mono Variable", "Fira Code", "Consolas", monospace;
+  --font-serif: "Source Serif 4 Variable", "PingFang TC", "STHeitiTC-Light", "Microsoft JhengHei", "Noto Sans TC", "Apple LiGothic Medium", system-ui, -apple-system, Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono Variable", "Fira Code", "Consolas", "Courier New", monospace;
 }
 
 /* Base styles */
