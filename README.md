@@ -8,7 +8,7 @@
 <p align="center">
   <img src="./web/public/cover-zh-tw.jpg" alt="Claude Code from Source — 書籍封面" width="400" />
   <br/><br/>
-  <a href="https://claude-code-from-source.com"><strong>線上閱讀：claude-code-from-source.com</strong></a>
+  <a href="https://fullstackladder.dev/claude-code-from-source-zh-tw/"><strong>線上閱讀：fullstackladder.dev/claude-code-from-source-zh-tw/</strong></a>
 </p>
 
 ---
